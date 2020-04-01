@@ -1,0 +1,92 @@
+﻿@model IEnumerable<CMSShoppingCart.Models.ViewModels.Pages.PageVM>
+
+@{
+    ViewBag.Title = "Pages";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Add New Page", "AddPage")
+</p>
+
+@if (!Model.Any())
+{
+    <h1 class="text-center">There No Pages.</h1>
+}
+else
+{
+
+    <table class="table sorting" id="pages">
+        <tr class="home">
+            <th>
+                @Html.DisplayNameFor(model => model.Title)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Slug)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HasSidebar)
+            </th>
+            <th>
+
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr id="id_@item.Id" class="@item.Slug">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slug)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.HasSidebar)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "EditPage", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "PageDetails", new { id = item.Id }) |
+                    @if (item.Slug != "home")
+                    {
+                        @Html.ActionLink("Delete", "DeletePage", new { id = item.Id }, new { @class = "delete " })
+                    }
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@section Scripts{
+
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.min.js"></script>
+    <script>
+        $(function () {
+            // Confirmation of deletion
+            $("a.delete").on('click', function () {
+                // Ok -> true , Cancel -> false.
+                // On true visit allow GET request of delete(DeletePage) and on false block or prevent on GET request of delete(DeletePage)
+                if (!confirm("Do you want to delete page?.")) return false;
+            });
+
+
+            //  Sorting using Drag and drop
+            $("table#pages tbody").sortable({
+                items: "tr:not(.home)",
+                placeholder: "ui-state-highlight",
+                update: function () {
+                    var ids = $("table#pages tbody").sortable("serialize");
+                    console.log(ids);
+                    var url = "/Admin/Pages/ReorderPages";
+
+                    $.post(url, ids, function (data) {
+                    });
+
+                }
+            })
+
+        });
+    </script>
+}
