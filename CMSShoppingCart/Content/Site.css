@@ -18,3 +18,15 @@ div.new-cat {
 span.ajax-text {
     display: none;
 }
+
+div.new-cat {
+    margin-bottom: 50px;
+}
+
+table.sorting.categories td{
+    padding:20px !important;
+}
+
+#imgpreview.img-thumbnail {
+    margin-top: 10px;
+}
